@@ -8,7 +8,7 @@
 
 ## Description
 
-- To create a Note Taker that can be used to write and save notes using Express.js "^4.16.4"
+- To create an Express Note Taker that can be used to write and save notes using Express.js "^4.16.4"
 
 ## Table of Contents
 
