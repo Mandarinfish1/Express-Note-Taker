@@ -37,7 +37,7 @@
 
 ## Demo
 
-- 
+- N/A
 
 ## Contributing
 
