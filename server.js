@@ -1,26 +1,23 @@
-//code not given,
 
 // Import required modules
-const express = require("express");
-const apiRoutes = require("./routes/apiRoutes");
-const htmlRoutes = require("./routes/htmlRoutes");
+import express from "express";
+import apiRoutes from "./routes/apiRoutes.js";
+import htmlRoutes from "./routes/htmlRoutes.js";
 
-// Initialize the express app and define the port
+
+const PORT = process.env.PORT || 3001
 const app = express();
-const PORT = process.env.PORT || 3001;
 
-// Set up middleware
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(
+  express.json(),
+  express.urlencoded({ extended: true }),
+  express.static("public")
+);
 
-// Set up API routes
+// Initialize routes
 app.use("/api", apiRoutes);
+app.use(htmlRoutes);
 
-// Set up HTML routes
-app.use("/", htmlRoutes);
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+

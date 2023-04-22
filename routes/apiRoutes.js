@@ -1,35 +1,51 @@
-//code not given
+const fs = require("fs");
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
-const express = require("express");
-const store = require("../db/store");
-const router = express.Router();
+module.exports = function (app) {
+  app.get("/api/notes", (req, res) => {
+    fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
+      if (err) throw err;
+      res.json(JSON.parse(data));
+    });
+  });
 
-router.get("/notes", async (req, res, next) => {
-  try {
-    const notes = await store.getNotes()
-    res.json(notes)
-  } catch (error) {
-    next(error)
-  }
-})
+  app.post("/api/notes", (req, res) => {
+    const newNote = req.body;
+    newNote.id = uuidv4();
 
-router.post("/notes", async (req, res, next) => {
-  try {
-    const note = await store.addNote(req.body)
-    res.json(note)
-  } catch (error) {
-    next(error)
-  };
-});
+    fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
+      if (err) throw err;
+      const notes = JSON.parse(data);
+      notes.push(newNote);
 
-router.delete("/notes/:id", async (req, res, next) => {
-  try {
-    await store.removeNote(req.params.id)
-    res.json({ message: "Note successfully deleted." })
-  } catch (error) {
-    next(error)
-  }
-});
+      fs.writeFile(
+        path.join(__dirname, "../db/db.json"),
+        JSON.stringify(notes),
+        (err) => {
+          if (err) throw err;
+          res.json(newNote);
+        }
+      )
+    });
+  });
 
-module.exports = router;
+  app.delete("/api/notes/:id", (req, res) => {
+    const noteId = req.params.id;
 
+    fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
+      if (err) throw err;
+      const notes = JSON.parse(data);
+      const updatedNotes = notes.filter((note) => note.id !== noteId);
+
+      fs.writeFile(
+        path.join(__dirname, "../db/db.json"),
+        JSON.stringify(updatedNotes),
+        (err) => {
+          if (err) throw err;
+          res.json({ message: "Note deleted" });
+        }
+      );
+    });
+  });
+};
