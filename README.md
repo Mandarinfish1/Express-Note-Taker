@@ -49,7 +49,7 @@
 
 ## Reference
 
-- University of Richmond Full Stack Bootcamp
+- University of Richmond Full Stack Bootcamp Module 11 and https://github.com/tiffany-brand/express-note-taker
 
 ## Test Instructions
 
